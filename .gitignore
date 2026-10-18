@@ -1,0 +1,7 @@
+# Large toolchain downloads (JDK, Android build-tools) - re-downloadable, two files exceed GitHub 100MB limit
+CluckTalk/tools/
+
+# Signing key - never commit
+CluckTalk/keystore/
+*.keystore
+*.jks
