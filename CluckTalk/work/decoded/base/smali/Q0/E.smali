@@ -1,21 +1,10 @@
-.class abstract LQ0/E;
-.super LQ0/D;
+.class abstract LQ0/e;
+.super LQ0/d;
 .source "SourceFile"
 
 
 # direct methods
-.method public static b()Ljava/util/Set;
-    .locals 1
-
-    .line 1
-    sget-object v0, LQ0/u;->e:LQ0/u;
-
-    .line 2
-    .line 3
-    return-object v0
-.end method
-
-.method public static final c(Ljava/util/Set;)Ljava/util/Set;
+.method public static f([C)C
     .locals 2
 
     .line 1
@@ -28,65 +17,101 @@
     .line 4
     .line 5
     .line 6
-    invoke-interface {p0}, Ljava/util/Set;->size()I
+    array-length v0, p0
 
     .line 7
+    if-eqz v0, :cond_1
+
     .line 8
     .line 9
-    move-result v0
+    const/4 v1, 0x1
 
     .line 10
-    if-eqz v0, :cond_1
+    if-ne v0, v1, :cond_0
 
     .line 11
     .line 12
-    const/4 v1, 0x1
+    const/4 v0, 0x0
 
     .line 13
-    if-eq v0, v1, :cond_0
+    aget-char p0, p0, v0
 
     .line 14
     .line 15
-    goto :goto_0
+    return p0
 
     .line 16
     :cond_0
-    invoke-interface {p0}, Ljava/util/Set;->iterator()Ljava/util/Iterator;
+    new-instance p0, Ljava/lang/IllegalArgumentException;
 
     .line 17
     .line 18
-    .line 19
-    move-result-object p0
+    const-string v0, "Array has more than one element."
 
+    .line 19
     .line 20
-    invoke-interface {p0}, Ljava/util/Iterator;->next()Ljava/lang/Object;
+    invoke-direct {p0, v0}, Ljava/lang/IllegalArgumentException;-><init>(Ljava/lang/String;)V
 
     .line 21
     .line 22
     .line 23
-    move-result-object p0
+    throw p0
 
     .line 24
-    invoke-static {p0}, LQ0/D;->a(Ljava/lang/Object;)Ljava/util/Set;
+    :cond_1
+    new-instance p0, Ljava/util/NoSuchElementException;
 
     .line 25
     .line 26
-    .line 27
-    move-result-object p0
+    const-string v0, "Array is empty."
 
+    .line 27
     .line 28
-    goto :goto_0
+    invoke-direct {p0, v0}, Ljava/util/NoSuchElementException;-><init>(Ljava/lang/String;)V
 
     .line 29
-    :cond_1
-    invoke-static {}, LQ0/C;->b()Ljava/util/Set;
-
     .line 30
     .line 31
-    .line 32
-    move-result-object p0
+    throw p0
+.end method
 
-    .line 33
+.method public static g([Ljava/lang/Object;)Ljava/lang/Object;
+    .locals 2
+
+    .line 1
+    const-string v0, "<this>"
+
+    .line 2
+    .line 3
+    invoke-static {p0, v0}, Lkotlin/jvm/internal/j;->e(Ljava/lang/Object;Ljava/lang/String;)V
+
+    .line 4
+    .line 5
+    .line 6
+    array-length v0, p0
+
+    .line 7
+    const/4 v1, 0x1
+
+    .line 8
+    if-ne v0, v1, :cond_0
+
+    .line 9
+    .line 10
+    const/4 v0, 0x0
+
+    .line 11
+    aget-object p0, p0, v0
+
+    .line 12
+    .line 13
+    goto :goto_0
+
+    .line 14
+    :cond_0
+    const/4 p0, 0x0
+
+    .line 15
     :goto_0
     return-object p0
 .end method

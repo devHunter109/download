@@ -17,13 +17,16 @@ Everything below is also available as a desktop app. Full user guide: **[STUDIO_
 | Tab | What it does |
 |-----|--------------|
 | Build | Buttons for each pipeline step: Unpack XAPK, Decode, Rebuild, Align + Sign (base **and** all splits), Verify, Package XAPK, Install via adb, plus a one-click **Full build**. Shows which outputs exist. |
-| Images | Browse and preview every Flutter asset image, replace one with your own file (auto-resized to the original size), restore originals. |
-| Launcher icon | Replace `ic_launcher*.png` in every `mipmap-*dpi` folder from one PNG. |
-| Sounds | Replace or restore asset sounds. |
-| App label & strings | Change the app name under the icon; edit any `res/values*/strings.xml`. |
+| Images | Browse and preview every image (Flutter assets or Android res), replace from disk or clipboard (auto-resized), rotate/flip/grayscale/invert/hue/brightness/contrast/saturation/blur/tint/stamp text, batch export and import, restore originals. |
+| Launcher icon | Replace the legacy `ic_launcher*.png` at every density and the adaptive foreground/background layers from one PNG. |
+| Sounds | Replace, export, import or restore any audio file under the Flutter assets, including sub-folders. |
+| Dart strings (UI text) | Scan `libapp.so` in the arm64 split, search the on-screen text, and patch it in place (same length or shorter). Writes the split back for re-signing. |
+| Manifest & version | App label, version name/code, min/target SDK, debuggable/allowBackup/cleartext/largeHeap flags, launcher orientation, add/remove permissions, raw manifest editor. |
+| Resources XML | Edit any `res/**/*.xml` (strings, colors, styles, drawables, layouts) with validation, find, and find & replace across all values files. |
+| File browser | Tree of the decoded base; edit any text file, replace or export binaries, find in files. |
 | Settings | Paths to the JDK, apktool, build-tools, keystore, passwords, input/output names. |
 
-Originals of anything you replace are kept in `work/asset_backup/` until you decode again.
+Originals of anything you change are kept in `work/asset_backup/` (and `work/native/` for the arm64 split) until you decode or unpack again.
 The log pane shows the exact commands being run, so the GUI doubles as a teacher for the
 manual steps in the rest of this guide. `python clucktalk_studio.py --check` prints tool status
 without opening a window.
