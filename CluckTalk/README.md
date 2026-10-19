@@ -9,6 +9,27 @@ PowerShell + Git Bash). The versions and paths below are the ones that worked.
 
 ---
 
+## 0. GUI: CluckTalk Studio (easiest way)
+
+Everything below is also available as a desktop app. Double-click **`CluckTalk Studio.bat`**
+(or run `python clucktalk_studio.py`; needs Python 3 with tkinter and Pillow).
+
+| Tab | What it does |
+|-----|--------------|
+| Build | Buttons for each pipeline step: Unpack XAPK, Decode, Rebuild, Align + Sign (base **and** all splits), Verify, Package XAPK, Install via adb, plus a one-click **Full build**. Shows which outputs exist. |
+| Images | Browse and preview every Flutter asset image, replace one with your own file (auto-resized to the original size), restore originals. |
+| Launcher icon | Replace `ic_launcher*.png` in every `mipmap-*dpi` folder from one PNG. |
+| Sounds | Replace or restore asset sounds. |
+| App label & strings | Change the app name under the icon; edit any `res/values*/strings.xml`. |
+| Settings | Paths to the JDK, apktool, build-tools, keystore, passwords, input/output names. |
+
+Originals of anything you replace are kept in `work/asset_backup/` until you decode again.
+The log pane shows the exact commands being run, so the GUI doubles as a teacher for the
+manual steps in the rest of this guide. `python clucktalk_studio.py --check` prints tool status
+without opening a window.
+
+---
+
 ## 1. What this app is (read this first)
 
 `CluckTalk` is a **Flutter** app distributed as a **split APK bundle** (an `.xapk`).
@@ -96,6 +117,7 @@ java -version                      # -> openjdk 17.0.20.1
 CluckTalk/
 ├─ CluckTalk_1.0.9_APKPure.xapk      <- original bundle (input)
 ├─ README.md                         <- this file
+├─ clucktalk_studio.py               <- GUI (CluckTalk Studio), launch via 'CluckTalk Studio.bat'
 ├─ keystore/
 │   └─ clucktalk.keystore            <- signing key (created in Section 8)
 ├─ tools/                            <- jdk, apktool.jar, android-14 build-tools
