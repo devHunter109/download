@@ -14,6 +14,7 @@ Wraps the steps documented in README.md:
 
 Run:  python clucktalk_studio.py          (or double-click "CluckTalk Studio.bat")
       python clucktalk_studio.py --check  (print tool status, no window)
+      python clucktalk_studio.py --screenshots [dir]  (capture every tab to PNGs for the guide)
 """
 
 import glob
@@ -537,6 +538,7 @@ class StudioApp(tk.Tk):
 
         paned = ttk.PanedWindow(self, orient="vertical")
         paned.pack(fill="both", expand=True, padx=10, pady=(0, 4))
+        self.paned = paned
 
         self.nb = ttk.Notebook(paned)
         paned.add(self.nb, weight=3)
@@ -1279,6 +1281,73 @@ def cli_check():
           f"unsigned: {proj.unsigned.exists()}  signed: {(proj.signed / 'base.apk').exists()}  out: {proj.out.exists()}")
 
 
+def take_screenshots(app, out_dir):
+    """Walk through every tab and save a PNG of the window for the user guide."""
+    from PIL import ImageGrab
+    import ctypes
+
+    out_dir = Path(out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    app.geometry("1200x900+40+40")
+    app.attributes("-topmost", True)
+    app.lift()
+    app.update()
+    try:
+        app.paned.sashpos(0, 640)
+    except Exception:
+        pass
+
+    def bbox():
+        hwnd = int(app.wm_frame(), 16)
+        r = ctypes.wintypes.RECT()
+        DWMWA_EXTENDED_FRAME_BOUNDS = 9
+        try:
+            ctypes.windll.dwmapi.DwmGetWindowAttribute(hwnd, DWMWA_EXTENDED_FRAME_BOUNDS, ctypes.byref(r), ctypes.sizeof(r))
+        except Exception:
+            ctypes.windll.user32.GetWindowRect(hwnd, ctypes.byref(r))
+        return (r.left, r.top, r.right, r.bottom)
+
+    def grab(name):
+        app.update_idletasks()
+        app.update()
+        ImageGrab.grab(bbox=bbox(), all_screens=True).save(out_dir / f"{name}.png")
+        print("saved", name)
+
+    def select_first(listbox, show):
+        if listbox.size():
+            listbox.selection_clear(0, "end")
+            idx = 0
+            for i in range(listbox.size()):
+                if "splash" in listbox.get(i):
+                    idx = i
+                    break
+            listbox.selection_set(idx)
+            listbox.see(idx)
+            show()
+
+    plan = [
+        (0, lambda: app.run_task("Check tools", app.pipe.check_tools), 6000, "01-build"),
+        (1, lambda: select_first(app.img_list, app._show_image), 800, "02-images"),
+        (2, None, 800, "03-icon"),
+        (3, lambda: select_first(app.snd_list, app._show_sound), 800, "04-sounds"),
+        (4, None, 800, "05-text"),
+        (5, None, 800, "06-settings"),
+    ]
+
+    def step(i):
+        if i >= len(plan):
+            app.destroy()
+            return
+        tab, prep, wait, name = plan[i]
+        app.nb.select(tab)
+        app.update()
+        if prep:
+            prep()
+        app.after(wait, lambda: (grab(name), step(i + 1)))
+
+    app.after(600, lambda: step(0))
+
+
 def main():
     if "--check" in sys.argv:
         cli_check()
@@ -1286,9 +1355,20 @@ def main():
     if Image is None:
         print("Pillow is required:  python -m pip install pillow")
         sys.exit(1)
+    if "--screenshots" in sys.argv and IS_WIN:
+        import ctypes
+        import ctypes.wintypes  # noqa: F401
+        try:
+            ctypes.windll.shcore.SetProcessDpiAwareness(1)
+        except Exception:
+            pass
     app = StudioApp()
     if "--smoke" in sys.argv:
         app.after(2500, app.destroy)
+    if "--screenshots" in sys.argv:
+        i = sys.argv.index("--screenshots")
+        out = sys.argv[i + 1] if i + 1 < len(sys.argv) else str(ROOT / "docs" / "screenshots")
+        take_screenshots(app, out)
     app.mainloop()
     if "--smoke" in sys.argv:
         print("SMOKE OK")

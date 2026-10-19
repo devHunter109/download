@@ -41,6 +41,8 @@ The window has three areas:
    output. Blue lines are commands, green is success, red is failure, orange is a warning.
 3. **Status bar** at the bottom. Shows the running task and a progress indicator. While a
    task runs, the action buttons are greyed out.
+![CluckTalk Studio main window, Build tab with the log below](docs/screenshots/01-build.png)
+
 
 Two buttons in the header: **Check tools** (verifies all paths and prints tool versions)
 and **Refresh** (re-reads the folders if you changed files outside the app).
@@ -105,6 +107,8 @@ key, so Android refuses to update over it.
   Settings. You only need this once. If a keystore already exists the app warns you,
   because a new key means your earlier builds can no longer be updated in place.
 - **Open dist folder**, **Open decoded folder**, **Open README** are shortcuts.
+![Build tab: numbered pipeline buttons, Full build, and output status](docs/screenshots/01-build.png)
+
 
 ### Images
 Left: every file in `assets/flutter_assets/assets/images/` (splash, onboarding pictures,
@@ -121,16 +125,22 @@ file size. Transparent areas show over a checkerboard.
   `work/asset_backup/`.
 
 Because the file name does not change, you never have to touch `AssetManifest.json`.
+![Images tab: asset list on the left, preview with checkerboard on the right](docs/screenshots/02-images.png)
+
 
 ### Launcher icon
 Shows the home-screen icon at each density (mdpi 48 px up to xxxhdpi 192 px).
 **Replace launcher icon (all densities)…** takes one square PNG, ideally 512 px or
 larger, and writes a correctly sized copy into every `mipmap-*dpi` folder.
 **Restore original icons** undoes it.
+![Launcher icon tab: current icon at every density](docs/screenshots/03-icon.png)
+
 
 ### Sounds
 Same idea as Images for `assets/flutter_assets/assets/sounds/`. **Play** opens the file in
 your default player. Replace an `.mp3` with an `.mp3`; the file is copied as-is.
+![Sounds tab](docs/screenshots/04-sounds.png)
+
 
 ### App label & strings
 - **App label** is the name shown under the icon. Type a new one and press **Apply**. The
@@ -140,12 +150,16 @@ your default player. Replace an `.mp3` with an `.mp3`; the file is copied as-is.
   **Save** checks that the XML still parses before writing, because a broken strings file
   makes the rebuild fail. In this app most of these strings belong to the ExoPlayer library,
   not to the game's own screens.
+![App label and strings tab](docs/screenshots/05-text.png)
+
 
 ### Settings
 Paths to the input `.xapk`, JDK, apktool, build-tools, keystore, the key alias and
 passwords, the work and dist folders, the output file name and the adb executable.
 **Save settings** writes `studio_config.json` next to the script. **Reset to defaults**
 re-detects everything relative to the project folder.
+![Settings tab with all tool paths](docs/screenshots/06-settings.png)
+
 
 ---
 
@@ -182,11 +196,22 @@ See README section 7 for the binary-patch caveats if you must change Dart text.
 
 ---
 
-## 7. Files the app creates
+## 7. Regenerating the screenshots
+
+```
+python clucktalk_studio.py --screenshots docs/screenshots
+```
+
+opens the app, walks through every tab and saves one PNG per tab into `docs/screenshots/`.
+
+---
+
+## 8. Files the app creates
 
 ```
 CluckTalk/
 ├─ studio_config.json        <- your Settings (only after you press Save settings)
+├─ docs/screenshots/         <- images used by this guide
 ├─ work/
 │   ├─ xapk/                 <- unpacked bundle
 │   ├─ decoded/base/         <- editable tree (your edits live here)
