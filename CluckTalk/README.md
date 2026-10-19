@@ -11,7 +11,7 @@ PowerShell + Git Bash). The versions and paths below are the ones that worked.
 
 ## 0. GUI: CluckTalk Studio (easiest way)
 
-Everything below is also available as a desktop app. Double-click **`CluckTalk Studio.bat`**
+Everything below is also available as a desktop app. Full user guide: **[STUDIO_GUIDE.md](STUDIO_GUIDE.md)**. Double-click **`CluckTalk Studio.bat`**
 (or run `python clucktalk_studio.py`; needs Python 3 with tkinter and Pillow).
 
 | Tab | What it does |
